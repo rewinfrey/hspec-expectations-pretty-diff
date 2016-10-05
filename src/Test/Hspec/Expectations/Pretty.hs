@@ -59,7 +59,6 @@ import           Data.List
 import           Data.Algorithm.Diff (getDiff, Diff(..))
 
 import           Text.Nicify
-import           System.Console.ANSI
 
 import           Control.Monad (unless)
 
