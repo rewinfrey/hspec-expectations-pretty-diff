@@ -92,14 +92,14 @@ infix 1 `shouldBe`, `shouldSatisfy`, `shouldStartWith`, `shouldEndWith`, `should
 infix 1 `shouldNotBe`, `shouldNotSatisfy`, `shouldNotContain`, `shouldNotReturn`
 
 prettyColor :: Show a => a -> String
-prettyColor = hscolour' . nicify . show
+prettyColor = nicify . show
   where hscolour' = hscolour (TTYg Ansi16Colour) defaultColourPrefs False False "" False
 
 diffColor :: String -> String -> String
 diffColor x y = unlines $ map addSign $ getDiff (lines x) (lines y)
   where addSign (Both _ s) = "   " ++ s
-        addSign (First  s) = color Red "---" ++ s
-        addSign (Second s) = color Green "+++" ++ s
+        addSign (First  s) = "---" ++ s
+        addSign (Second s) = "+++" ++ s
         color c s = setSGRCode [SetColor Foreground Dull c] ++ s ++ setSGRCode [Reset]
 
 -- |
