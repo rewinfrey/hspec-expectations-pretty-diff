@@ -58,9 +58,6 @@ import           Data.Typeable
 import           Data.List
 import           Data.Algorithm.Diff (getDiff, Diff(..))
 
-import           Language.Haskell.HsColour hiding (layout)
-import           Language.Haskell.HsColour.Colourise (defaultColourPrefs)
-import           Language.Haskell.HsColour.ANSI (TerminalType(..))
 import           Text.Nicify
 import           System.Console.ANSI
 
@@ -93,14 +90,12 @@ infix 1 `shouldNotBe`, `shouldNotSatisfy`, `shouldNotContain`, `shouldNotReturn`
 
 prettyColor :: Show a => a -> String
 prettyColor = nicify . show
-  where hscolour' = hscolour (TTYg Ansi16Colour) defaultColourPrefs False False "" False
 
 diffColor :: String -> String -> String
 diffColor x y = unlines $ map addSign $ getDiff (lines x) (lines y)
   where addSign (Both _ s) = "   " ++ s
         addSign (First  s) = "---" ++ s
         addSign (Second s) = "+++" ++ s
-        color c s = setSGRCode [SetColor Foreground Dull c] ++ s ++ setSGRCode [Reset]
 
 -- |
 -- @actual \`shouldBe\` expected@ sets the expectation that @actual@ is equal
@@ -113,7 +108,7 @@ actual `shouldBe` expected = expectTrue (diffColor (prettyColor expected) (prett
 with_loc(shouldSatisfy, (Show a) => a -> (a -> Bool) -> Expectation)
 v `shouldSatisfy` p = expectTrue ("predicate failed on: " ++ show v) (p v)
 
-with_loc(compareWith, (Show a, Eq a) => (a -> a -> Bool) -> String -> a -> a -> Expectation)
+with_loc(compareWith, (Show a) => (a -> a -> Bool) -> String -> a -> a -> Expectation)
 compareWith comparator errorDesc result expected = expectTrue errorMsg (comparator expected result)
   where
     errorMsg = show result ++ " " ++ errorDesc ++ " " ++ show expected
@@ -205,6 +200,7 @@ anyErrorCall = const True
 
 errorCall :: String -> Selector ErrorCall
 errorCall s (ErrorCall msg) = s == msg
+errorCall _ _ = False
 
 anyIOException :: Selector IOException
 anyIOException = const True
