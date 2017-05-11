@@ -70,7 +70,7 @@ import           GHC.Stack
 
 #if MIN_VERSION_base(4,9,0)
 
-#define_with_loc(NAME, TYPE) NAME :: HasCallStack => TYPE
+#define with_loc(NAME, TYPE) NAME :: HasCallStack => TYPE
 
 #else
 
