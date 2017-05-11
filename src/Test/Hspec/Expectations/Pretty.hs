@@ -68,7 +68,15 @@ import           Test.Hspec.Expectations.Pretty.Matcher
 
 import           GHC.Stack
 
+#if MIN_VERSION_base(4,9,0)
+
+#define_with_loc(NAME, TYPE) NAME :: HasCallStack => TYPE
+
+#else
+
 #define with_loc(NAME, TYPE) NAME :: (?loc :: CallStack) => TYPE
+
+#endif
 
 #else
 
